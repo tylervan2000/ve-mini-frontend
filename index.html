@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>VE Mini - Tạo Video Từ Text</title>
+</head>
+<body>
+    <h2>VE Mini - Tạo Video Từ Text</h2>
+
+    <textarea id="inputText" rows="6" cols="50" placeholder="Nhập nội dung..."></textarea>
+    <br><br>
+
+    <button onclick="sendToBackend()">Gửi lên backend</button>
+
+    <p id="result"></p>
+
+<script>
+const API_URL = "https://ve-mini-backend.onrender.com/generate-video";
+
+async function sendToBackend() {
+    const text = document.getElementById("inputText").value;
+    const resultEl = document.getElementById("result");
+
+    resultEl.innerHTML = "⏳ Đang gửi yêu cầu...";
+
+    try {
+        const res = await fetch(API_URL, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ text })
+        });
+
+        const data = await res.json();
+        resultEl.innerHTML = "<pre>" + JSON.stringify(data, null, 2) + "</pre>";
+    } catch (err) {
+        resultEl.textContent = "Lỗi: " + err;
+    }
+}
+</script>
+
+</body>
+</html>
